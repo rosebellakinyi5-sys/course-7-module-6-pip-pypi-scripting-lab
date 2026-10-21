@@ -1,0 +1,4 @@
+User logged in
+User updated profile
+Report exported
+API Data result: Offline Data Recovery Mode
