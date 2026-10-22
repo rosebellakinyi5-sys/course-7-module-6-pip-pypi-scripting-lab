@@ -1,8 +1,7 @@
 from datetime import datetime
+import os
 import json
 import urllib.request
-import os
-
 
     # TO-DO: Implement log generation logic
 
@@ -32,13 +31,24 @@ def fetch_data():
 
 def generate_log(data=None):
     """Generate a structured log file with API results."""
-    post = fetch_data()
-    title = post.get("title","No title found")
-    print(f"Fetched Post Title: {title}")
+
+    if data is not None and not isinstance(data, list):
+        raise ValueError("Expected a list for data parameter.")
+
+    if data is None:
+        post = fetch_data()
+        title = post.get("title","No title found")
+        print(f"Fetched Post Title: {title}")
 
 
-    log_data = data if data else ["User logged in", "User updated profile", "Report exported"]
-    log_data.append(f"API Data result: {title}")
+        log_data = [
+            "User logged in",
+            "User updated profile",
+            f"API Data Result: {title}",
+            "Report exported"
+        ]
+    else:
+        log_data = data
 
     filename = f"log_{datetime.now().strftime('%Y%m%d')}.txt"
 
@@ -47,6 +57,7 @@ def generate_log(data=None):
             file.write(f"{entry}\n")
 
     print(f"Log written to {filename}")
+    return filename
 
 if __name__ == "__main__":
     generate_log()
